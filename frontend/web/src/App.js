@@ -53,7 +53,7 @@ function App() {
   return (
     <div id="app">
       <div className="jumbotron">
-        <div className="container text-center"><h2>Hello React</h2></div>
+        <div className="container text-center"><h2>Idea API</h2></div>
       </div>
 
       <div className="container-fluid">
