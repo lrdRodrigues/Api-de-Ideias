@@ -1,29 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './ideaItem.css';
-import './service/api';
+import api from './service/api';
 
 function App() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
   const [imgUrl, setImgUrl] = useState('')
-  const [ideas, setIdeas] = useState('')
+  const [ideas, setIdeas] = useState([])
 
   useEffect(() => {
-
+    async function getIdeas() {
+      const response = await api.get('/idea')
+      console.log('response', response)
+      setIdeas(response.data)
+    }
+    getIdeas()
   }, []
   )
 
-  function handleSubmit(e) {
+  function updateIdea(id) {
+    console.log('update id', id)
+  }
+
+  async function deleteIdea(id) {
+    console.log('delete id', id)
+    const result = await api.delete(`/idea/${id}`)
+    if (result)
+      setIdeas(ideas.filter(idea => idea._id !== id))
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault()
+
     const idea = {
-      title,
+      name: title,
       description,
-      tags
+      type: tags,
+      img_url: imgUrl
     }
 
     console.log('idea', idea)
+
+    const response = await api.post('/idea', idea)
+    console.log('response', response)
+
+    setIdeas([...ideas, response.data])
   }
 
 
@@ -91,70 +114,27 @@ function App() {
           </div>
 
           <div className="col-sm-8">
-
-            <div className="card">
-              <img className="card-img-top" src="https://c1.wallpaperflare.com/preview/2/523/771/mindmap-brainstorm-idea-innovation.jpg" alt="Card cap" />
-              <div className="card-body">
-                <h5 className="card-title">Idea Title</h5>
-                <p className="card-text">Idea Description</p>
-                <strong>Tags: </strong>
+            {ideas.map(idea => (
+              <div key={idea._id} className="card">
+                <img className="card-img-top" src={idea.img_url} alt="Card cap" />
+                <div className="card-body">
+                  <h5 className="card-title">{idea.name}</h5>
+                  <p className="card-text">{idea.description}</p>
+                  <strong>Tags: {idea.type} </strong>
+                </div>
+                <div className="card-body">
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => { updateIdea(idea._id) }}
+                  >
+                    Edit Idea</button> &nbsp;
+                <button
+                    className="btn btn-danger"
+                    onClick={() => { deleteIdea(idea._id) }}
+                  >Delete Idea</button>
+                </div>
               </div>
-              <div className="card-body">
-                <button className="btn btn-warning">Edit Idea</button> &nbsp;
-                <button className="btn btn-danger">Delete Idea</button>
-              </div>
-            </div>
-
-            <div className="card">
-              <img className="card-img-top" src="https://c1.wallpaperflare.com/preview/2/523/771/mindmap-brainstorm-idea-innovation.jpg" alt="Card cap" />
-              <div className="card-body">
-                <h5 className="card-title">Idea Title</h5>
-                <p className="card-text">Idea Description</p>
-                <strong>Tags: </strong>
-              </div>
-              <div className="card-body">
-                <button className="btn btn-warning">Edit Idea</button> &nbsp;
-                <button className="btn btn-danger">Delete Idea</button>
-              </div>
-            </div>
-
-            <div className="card">
-              <img className="card-img-top" src="https://c1.wallpaperflare.com/preview/2/523/771/mindmap-brainstorm-idea-innovation.jpg" alt="Card cap" />
-              <div className="card-body">
-                <h5 className="card-title">Idea Title</h5>
-                <p className="card-text">Idea Description</p>
-                <strong>Tags: </strong>
-              </div>
-              <div className="card-body">
-                <button className="btn btn-warning">Edit Idea</button> &nbsp;
-                <button className="btn btn-danger">Delete Idea</button>
-              </div>
-            </div>
-
-            <div className="card">
-              <img className="card-img-top" src="https://c1.wallpaperflare.com/preview/2/523/771/mindmap-brainstorm-idea-innovation.jpg" alt="Card cap" />
-              <div className="card-body">
-                <h5 className="card-title">Idea Title</h5>
-                <p className="card-text">Idea Description</p>
-                <strong>Tags: </strong>
-              </div>
-              <div className="card-body">
-                <button className="btn btn-warning">Edit Idea</button> &nbsp;
-                <button className="btn btn-danger">Delete Idea</button>
-              </div>
-            </div>
-            <div className="card">
-              <img className="card-img-top" src="https://c1.wallpaperflare.com/preview/2/523/771/mindmap-brainstorm-idea-innovation.jpg" alt="Card cap" />
-              <div className="card-body">
-                <h5 className="card-title">Idea Title</h5>
-                <p className="card-text">Idea Description</p>
-                <strong>Tags: </strong>
-              </div>
-              <div className="card-body">
-                <button className="btn btn-warning">Edit Idea</button> &nbsp;
-                <button className="btn btn-danger">Delete Idea</button>
-              </div>
-            </div>
+            ))}
 
 
 
