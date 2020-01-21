@@ -50,9 +50,6 @@ function List() {
 }
 
 const styles = StyleSheet.create({
-    main:{
-        backgroundColor: '#ccc'
-    },
     ideaContainer:{
         marginTop: 10, 
         marginBottom: 10, 
@@ -60,15 +57,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, 
         justifyContent: 'center', 
         alignItems: 'center', 
-        backgroundColor: '#fff',
+        backgroundColor: '#dde',
         borderRadius: 10
 
     },
     label:{
         color: '#000',
         fontSize: 18,
-        textAlign: 'center',
-        color: '#58f', 
+        textAlign: 'center'
     },
     ideaImage: {
         width: 250,
