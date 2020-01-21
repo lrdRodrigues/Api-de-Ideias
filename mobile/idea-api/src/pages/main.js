@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-function Main(){
+function Main({ navigation }){
     return (
         <View style={styles.main}>
           <View style={styles.container}>
             <Text style={styles.title} >Idea API!</Text>
           </View>
           <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('Create')} style={styles.button}>
             <Text style={styles.buttonText}>Create Idea</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('List')} style={styles.button}>
             <Text style={styles.buttonText}>List Ideas</Text>
           </TouchableOpacity>
           </View>
