@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import api from '../services/api'
 
 function List() {
@@ -14,6 +14,17 @@ function List() {
         loadIdeas()
     }, [])
 
+    async function deleteIdea(id){
+        const response = await api.delete(`/idea/${id}`)
+        console.log('Resultado', response.data) 
+        Alert.alert('Result', 'Idea Successfully Deleted!')
+        setIdeas( ideas.filter(idea => idea._id !== id))
+    }
+
+    async function editIdea(id){
+
+    }
+
     return (
         <>
             <ScrollView style={styles.main}>
@@ -21,15 +32,14 @@ function List() {
                     <View key={idea._id} style={styles.ideaContainer}>
                         <Image style={styles.ideaImage} source={{ uri: idea.img_url }} />
                         <Text style={styles.label}>Title: {idea.name}</Text>
-                        <Text style={styles.label}>Description: </Text>
-                        <Text style={styles.label} > {idea.description}</Text>
+                        <Text style={styles.label}>Description: {idea.description} </Text>
                         <Text style={styles.label}>Tags: {idea.type}</Text>
                         <View style={styles.optionsButtons}>
-                        <TouchableOpacity style={styles.edit}>
-                            <Text>Edit Idea</Text>
+                        <TouchableOpacity onPress={() => editIdea(idea._id)} style={styles.edit}>
+                            <Text style={styles.buttonText}>Edit Idea</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.delete}>
-                            <Text>Delete Idea</Text>
+                        <TouchableOpacity onPress={() => deleteIdea(idea._id)} style={styles.delete}>
+                            <Text style={styles.buttonText}>Delete Idea</Text>
                         </TouchableOpacity>
                         </View>
                     </View>
@@ -47,12 +57,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, 
         justifyContent: 'center', 
         alignItems: 'center', 
-        backgroundColor: '#036',
+        backgroundColor: '#dde',
         borderRadius: 10
 
     },
     label:{
-        color: '#FFF'
+        color: '#000',
+        fontSize: 18,
+        textAlign: 'center'
     },
     ideaImage: {
         width: 250,
@@ -89,6 +101,9 @@ const styles = StyleSheet.create({
         },
         elevation: 2,
         marginTop: 20,
+    },
+    buttonText:{
+        fontSize: 16
     },
     optionsButtons:{
         flexDirection: 'row', 
